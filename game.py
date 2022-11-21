@@ -3,7 +3,7 @@ def new_board():
     [None, None, None],
     [None, None, None],
     [None, None, None],
-] 
+    ] 
 
 def render(board):
     print('   0 1 2')
@@ -26,7 +26,7 @@ def is_valid_move(board, coord):
     return board[coord[0]][coord[1]] is None
 
 def get_move():
-    user_input = input("What is your moves X and Y coordinates? (Space separated)\n")
+    user_input = input("What is your moves Y and X coordinates? (Space separated)\n")
     coord = tuple(int(x) for x in user_input.split(' '))
     return coord
 
@@ -48,13 +48,12 @@ def make_move(board, coord, player):
 def get_winner(board):
     all_horizontal_lines = board
     all_vertical_lines = [[x[col] for x in all_horizontal_lines] for col in range(3)]
-    left_diagonal_line = [all_horizontal_lines[i][i] for i in range(3)]
-    right_diagonal_line = [all_horizontal_lines[i][i] for i in range(-1,-4,-1)]
-    print(list(range(-1,-4,-1)))
-    print(left_diagonal_line)
-    for row in board:
-        if len(set(row)) == 1:
-            return row[0]
+    left_diagonal_line = [[all_horizontal_lines[i][i] for i in range(3)]]
+    right_diagonal_line = [[all_horizontal_lines[-1-i][i] for i in range(2,-1,-1)]]
+    all_lines = all_horizontal_lines + all_vertical_lines + left_diagonal_line + right_diagonal_line
+    for line in all_lines:
+        if len(set(line)) == 1: 
+            return line[0]
     return None
 
 def play_game():
@@ -64,17 +63,22 @@ def play_game():
     while True:
         current_player = players[(turn_number+1)%2]
         render(board)
+        if (winner := get_winner(board)):
+            break
         print('Player ', current_player, ' turn to play.')
         coord = get_valid_move(board)
         print(current_player)
         board = make_move(board, coord, player=current_player)
         turn_number += 1
+    print("Game is over. Player", winner, "won!")
         
 
-board_1 = [
-  ['X', 'X', 'O'],
-  ['O', 'X', None],
-  ['O', 'O', 'X']
-]
-get_winner(board_1)
-#play_game()
+# board_1 = [
+#   ['X', 'X', 'O'],
+#   ['O', 'X', None],
+#   ['O', 'O', 'X']
+# ]
+# get_winner(board_1)
+
+if __name__ == '__main__':
+    play_game()
