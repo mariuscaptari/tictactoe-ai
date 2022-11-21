@@ -27,8 +27,7 @@ def is_valid_move(board, coord):
 
 def get_move():
     user_input = input("What is your moves Y and X coordinates? (Space separated)\n")
-    coord = tuple(int(x) for x in user_input.split(' '))
-    return coord
+    return tuple(int(x) for x in user_input.split(' '))
 
 def get_valid_move(board):
     while True:
@@ -36,7 +35,7 @@ def get_valid_move(board):
         if is_valid_move(board, coord):
             return coord
         else:
-            print("Invalid move, try again") 
+            print("Invalid move, try again")
 
 def make_move(board, coord, player):
     if board[coord[0]][coord[1]] is not None:
@@ -46,11 +45,10 @@ def make_move(board, coord, player):
     return board
 
 def get_winner(board):
-    all_horizontal_lines = board
-    all_vertical_lines = [[x[col] for x in all_horizontal_lines] for col in range(3)]
-    left_diagonal_line = [[all_horizontal_lines[i][i] for i in range(3)]]
-    right_diagonal_line = [[all_horizontal_lines[-1-i][i] for i in range(2,-1,-1)]]
-    all_lines = all_horizontal_lines + all_vertical_lines + left_diagonal_line + right_diagonal_line
+    all_vertical_lines = [[x[col] for x in board] for col in range(3)]
+    left_diagonal_line = [[board[i][i] for i in range(3)]]
+    right_diagonal_line = [[board[-1-i][i] for i in range(2,-1,-1)]]
+    all_lines = board + all_vertical_lines + left_diagonal_line + right_diagonal_line
     for line in all_lines:
         if len(set(line)) == 1: 
             return line[0]
@@ -72,13 +70,5 @@ def play_game():
         turn_number += 1
     print("Game is over. Player", winner, "won!")
         
-
-# board_1 = [
-#   ['X', 'X', 'O'],
-#   ['O', 'X', None],
-#   ['O', 'O', 'X']
-# ]
-# get_winner(board_1)
-
 if __name__ == '__main__':
     play_game()
